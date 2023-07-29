@@ -10,10 +10,7 @@ export class AuthController {
   // ———————————————————————————————————————————————————— Post -> /auth/signup
   @Post('signup')
   signup(@Body() dto: AuthDto) {
-    console.log({
-      dto,
-    });
-    return this.authService.signup();
+    return this.authService.signup(dto);
   }
 
   // ———————————————————————————————————————————————————— Post -> /auth/signin
