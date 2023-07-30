@@ -1,8 +1,8 @@
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +36,25 @@ export class AuthService {
   }
 
   // —————————————————————————————————————————————— CALLED WHEN USER MAKE A REQUEST BY THE CONTROLLER (auth.controller.ts l-18)
-  signin() {
+  async signin(dto: AuthDto) {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ find user by id
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ not found -> alert user
+    if (!user)
+      throw new ForbiddenException(
+        'No account iss register with this email, try to signin',
+      );
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ found -> compare password
+    const pwMatches = await argon.verify(user.hash, dto.password);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ password incorrect -> throw exception
+    if (!pwMatches)
+      throw new ForbiddenException('password seems to be incorect');
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ password correct -> send back user
+    delete user.hash;
     return { msg: 'Im signin' };
   }
 }
