@@ -55,6 +55,6 @@ export class AuthService {
       throw new ForbiddenException('password seems to be incorect');
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ password correct -> send back user
     delete user.hash;
-    return { msg: 'Im signin' };
+    return user;
   }
 }
