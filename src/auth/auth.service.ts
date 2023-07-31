@@ -62,7 +62,7 @@ export class AuthService {
     // delete user.hash;
     return this.signToken(user.id, user.email);
   }
-
+  // ———————————————————————————————————————————————————————————————————————— PROVIDE THE TOKEN TO THE USER
   async signToken(userId: number, email): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
