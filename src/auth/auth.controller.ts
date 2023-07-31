@@ -2,7 +2,7 @@ import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 
-// —————————————————————————————————————————————————————— Controller -> /auth/...
+// —————————————————————————————————————————————————————— Controller -> prefix by /auth/...
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
