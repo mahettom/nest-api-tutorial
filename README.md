@@ -17,6 +17,8 @@ $ npm run start:dev
 
 ## Test
 
+> end-to-end test -> `PactumJS`
+
 ```bash
 # unit tests
 $ npm run test
