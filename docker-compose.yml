@@ -10,5 +10,15 @@ services:
       POSTGRES_D8: nest
     networks:
       - freecodecamp
+  test-db:
+    image: postgres:13
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_D8: nest
+    networks:
+      - freecodecamp
 networks:
   freecodecamp:
