@@ -13,7 +13,7 @@ export class PrismaService extends PrismaClient {
       },
     });
   }
-
+  // ————————————————————————————— Clean data in the correct order with tansaction
   cleanDb() {
     return this.$transaction([
       this.bookmark.deleteMany(),
