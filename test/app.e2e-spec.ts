@@ -1,7 +1,8 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { EditUserDto } from '../src/user/dto';
 import { AppModule } from '../src/app.module';
-import { AuthDto } from 'src/auth/dto';
+import { AuthDto } from '../src/auth/dto';
 import { Test } from '@nestjs/testing';
 import * as pactum from 'pactum';
 
@@ -99,6 +100,7 @@ describe('App e2e', () => {
       it('should throw if any info provided', () => {
         return pactum.spec().post('/auth/signin').expectStatus(400);
       });
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  200  ~~~~~~~~~~~~~~~~~~~~~~~~
       it('should signin', () => {
         return pactum
           .spec()
@@ -112,7 +114,9 @@ describe('App e2e', () => {
 
   // ////////////////////////////////     USER      //////////////////////////////
   describe('User', () => {
+    // ////////////////////////////////////////////////////////// GET ////////////
     describe('Get me', () => {
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  200  ~~~~~~~~~~~~~~~~~~~~~~~~
       it('should get current user', () => {
         return pactum
           .spec()
@@ -123,20 +127,38 @@ describe('App e2e', () => {
           .expectStatus(200);
       });
     });
-
-    describe('Edit user', () => {});
+    // ////////////////////////////////////////////////////////// EDIT ///////////
+    describe('Edit user', () => {
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  200  ~~~~~~~~~~~~~~~~~~~~~~~~
+      it('should edit user', () => {
+        const dto: EditUserDto = {
+          firstName: 'UpdateName',
+          lastName: 'Works',
+        };
+        return pactum
+          .spec()
+          .patch('/users')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200);
+        //.expectBodyContain(dto.email)
+      });
+    });
   });
 
   // //////////////////////////////     BOOKMARK      ////////////////////////////
   describe('Bookmarks', () => {
+    // ////////////////////////////////////////////////////////// CREATE /////////
     describe('Create bookmarks', () => {});
-
+    // ////////////////////////////////////////////////////////// GET ALL ////////
     describe('Get bookmarks', () => {});
-
+    // ////////////////////////////////////////////////////////// GET ID /////////
     describe('Get bookmarks by id', () => {});
-
+    // ////////////////////////////////////////////////////////// EDIT ///////////
     describe('Edit bookmark by id', () => {});
-
+    // ////////////////////////////////////////////////////////// DELETE /////////
     describe('Delete bookmark by id', () => {});
   });
 });
