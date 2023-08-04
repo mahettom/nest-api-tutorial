@@ -6,7 +6,7 @@ import { User } from '@prisma/client';
 // ———————————————————————————————————————————————————— Only access under if token valid
 @UseGuards(JwtGuard)
 // —————————————————————————————————————————————————————— Controller -> prefix by /user/...
-@Controller('user')
+@Controller('users')
 export class UserController {
   // ———————————————————————————————————————————————————— Get -> /user/me
   @Get('me')
